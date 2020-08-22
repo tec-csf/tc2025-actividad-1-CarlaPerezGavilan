@@ -1,3 +1,11 @@
+//
+//  main.c
+//  ejercicio actividad 1 - apuntadores 
+//
+//  Created by Carla Pérez Gavilán on 20/08/20.
+//  Copyright (c) 2020 Carla Pérez Gavilán. All rights reserved.
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -62,7 +70,7 @@ int main(int argc, const char *argv[]){
 
     while (opcion != 0) 
     {
-        printf("1-Incorporar Paciente\n2-Obtener cama dado un paciente 2\n 3-Dar de alta a paciente \n4-Listar a los pacientes\n5- Camas Disponibles \n 0-Salir\n");
+        printf("1- Incorporar Paciente\n2- Obtener cama dado un paciente \n3- Dar de alta a paciente \n4- Listar a los pacientes\n5- Camas Disponibles \n 0- Salir\n");
         
         printf("Selecciona tu opción: ");
         scanf("%d", &opcion);
@@ -94,12 +102,23 @@ void incorporarPaciente()
             camas_hospital = (cama *) realloc(camas_hospital, sizeof(cama) * (cantidad + 5));
             
             final = camas_hospital + cantidad + 5;
+            int index_last = cantidad;
+    
+            for (cama * aux = camas_hospital+cantidad; aux < final; ++aux) 
+            {
+            index_last++;
+            aux->num = index_last;
+            aux->ocupada_por = NULL;
+        
+            }
+            cantidad = cantidad+5;
     }
     
     for (cama * aux = camas_hospital; aux < final; ++aux) 
     {
         if(aux->ocupada_por == NULL)
             {
+               
                 aux->ocupada_por = (paciente * ) malloc(sizeof(paciente));
 
                 aux->ocupada_por->nombre = (char * ) malloc(sizeof(char)*25);
@@ -120,9 +139,6 @@ void incorporarPaciente()
                 cantidad_ocupadas++;
                 return;
             }
-        else{
-            printf("Cama ocupada: %d ", aux->num);
-        }
          
     }
 }
@@ -133,12 +149,18 @@ void getCama()
     printf("Ingresar el número de cama: ");
     scanf("%d", &num_cam);
     
-    cama * buscado = camas_hospital + num_cam;
-    printf("Número de cama: %d \n", buscado->num);
-    printf("Nombre del paciente: %s \n", buscado->ocupada_por->nombre);
-    printf("Apellido del paciente: %s \n", buscado->ocupada_por->apellidos);
-    printf("Edad: %d \n", buscado->ocupada_por->edad);
-    printf("Telefono: %s \n", buscado->ocupada_por->telefono);
+    cama * buscado = camas_hospital + num_cam - 1;
+    if(buscado->ocupada_por == NULL)
+    {
+        printf("No hay paciente en esta cama");
+    }else
+    {
+        printf("Número de cama: %d \n", buscado->num);
+        printf("Nombre del paciente: %s \n", buscado->ocupada_por->nombre);
+        printf("Apellido del paciente: %s \n", buscado->ocupada_por->apellidos);
+        printf("Edad: %d \n", buscado->ocupada_por->edad);
+        printf("Telefono: %s \n", buscado->ocupada_por->telefono);
+    }
     
 }
 
